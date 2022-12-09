@@ -1,6 +1,10 @@
 <template>
-  <ToDoItemStudy v-for="todo in todos" v-bind:key="todo" v-bind:TransferDataProps="todo"/>
-
+  <ToDoItemStudy 
+       v-for="todo in todos"  
+       v-bind:key="todo.id" 
+       v-bind:TransferDataProps="todo"
+       v-on:item-completed="markItemCompleted"/>
+<!--Note: v-bind <=> : ex: v-bind:key <=> :key; v-bind:TransferDataProps <=> :TransferDataProps   -->
 </template>
 
 <script>
@@ -18,17 +22,35 @@
           {
             id:1,
             title:'Work 1',
-            finish_yn: false
+            completed: false
           },
           {
             id:2,
-            title:'Work2',
-            finish_yn: false
+            title:'Work 2',
+            completed: false
+          },
+          {
+            id:3,
+            title:'Work 3',
+            completed: false
           }
         ])
+        const markItemCompleted = id =>{
+            // console.log(id)
+
+            //...toddos ko phải array có id ={1,2,3} nó là ref của array này 
+            //ref giống như cái hộp bên trong chứa giá trị của todos này, todos này như cái hộp, chính là pointer, chuôi vào bên trong cái hộp
+            //đó để lấy giá trị ra
+            todos.value = todos.value.map(chktodo =>{
+              if(chktodo.id === id) chktodo.completed = !chktodo.completed;
+              return chktodo;
+            }); //...map này biến đổi hàm array đó, lần lượt chạy qua từng phần tử của array đó
+
+        }
 
         return{                     //---return này dùng để trả về giá trị
-          todos
+          todos,
+          markItemCompleted
         }
       }
       

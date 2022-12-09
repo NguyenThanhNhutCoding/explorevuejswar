@@ -1,21 +1,36 @@
 <template>
-  <p class="todo-item is-finish" >
-    <input type="checkbox" name="checkone" id="chk"/>
-    {{TransferDataProps}}
+  <p :class="['todo-item', TransferDataProps.completed ? 'is-completed' : '']">
+    <input type="checkbox"  :checked="TransferDataProps.completed" 
+            v-on:change="markItemCompleted" v-on:item-completed="markItemCompleted"/>
+    {{TransferDataProps.title}}
     <button class="del-btn">Delete</button>
     <!-- <input type="button" name="delete" value="Delete" /> -->
   </p>
 </template>
 
-<script>
+<script>   
+    // import { ref, Ref } from 'vue';   //...First status...
+                                         //..Create dataStoreSource of vue support ...
+                                        //...No Need..
+
     export default {
         name: 'ToDoItemStudy',
-        props:['TransferDataProps']       //...Dùng để truyền dữ liệu hay truyền Data giữa các components (giữa các trang .vue với nhau)
+        props:['TransferDataProps'],       //...Dùng để truyền dữ liệu hay truyền Data giữa các components (giữa các trang .vue với nhau)  
+        setup(props, context){                           //...Always two parameters default(props, context)....
+          const markItemCompleted = ()=>{
+              // console.log(props.TransferDataProps)
+              context.emit('item-completed', props.TransferDataProps.id)  //...phát đi tín hiệu từ component con lên component mẹ ('tùy chọn', 'bắt buộc')
+          }
+          return{
+            markItemCompleted
+          }
+
+        }
     }
 </script>
 
 <style>
-.is-finish{
+.is-completed{
   text-decoration: line-through;         /*Ngạch ngang chuổi text */
 }
   .todo-item{
